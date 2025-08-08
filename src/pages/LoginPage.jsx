@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-// import Logo from '../assets/logo.svg'; // Anda bisa uncomment ini nanti jika sudah punya logo
 
 function LoginPage() {
     const [email, setEmail] = useState('');
@@ -14,7 +13,7 @@ function LoginPage() {
         setLoading(true);
 
         try {
-            const response = await axios.post(`/api/login`, {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/login`, {
                 email,
                 password,
             });
@@ -31,22 +30,13 @@ function LoginPage() {
     };
 
     return (
-        // Latar belakang utama dengan flexbox untuk menengahkan konten
         <div className="flex items-center justify-center min-h-screen bg-gray-900 text-gray-200 font-sans">
-            
-            {/* Kartu Login */}
             <div className="w-full max-w-md p-8 space-y-8 bg-gray-800 rounded-2xl shadow-lg border border-gray-700">
-                
-                {/* Header Kartu */}
                 <div className="text-center">
-                    {/* <img src={Logo} alt="Logo Aplikasi" className="w-20 h-20 mx-auto mb-4" /> */}
                     <h2 className="text-3xl font-bold text-white">Selamat Datang</h2>
                     <p className="text-gray-400">Masuk ke akun petugas Anda</p>
                 </div>
-
-                {/* Form */}
                 <form onSubmit={handleLogin} className="space-y-6">
-                    {/* Input Email */}
                     <div className="space-y-2">
                         <label htmlFor="email" className="block text-sm font-medium text-gray-300">Email</label>
                         <input
@@ -59,8 +49,6 @@ function LoginPage() {
                             className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         />
                     </div>
-
-                    {/* Input Password */}
                     <div className="space-y-2">
                         <label htmlFor="password" className="block text-sm font-medium text-gray-300">Password</label>
                         <input
@@ -73,15 +61,11 @@ function LoginPage() {
                             className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         />
                     </div>
-
-                    {/* Pesan Error */}
                     {error && (
                         <div className="px-4 py-3 text-sm text-red-200 bg-red-900/30 border border-red-500/50 rounded-lg">
                             {error}
                         </div>
                     )}
-
-                    {/* Tombol Login */}
                     <div>
                         <button
                             type="submit"

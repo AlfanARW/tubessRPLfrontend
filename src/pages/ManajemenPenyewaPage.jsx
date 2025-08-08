@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Sidebar from '../components/Sidebar';
 import { FiPlus, FiSearch } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 
 const ManajemenPenyewaPage = () => {
     const [penyewa, setPenyewa] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchPenyewa = async () => {
@@ -37,19 +39,23 @@ const ManajemenPenyewaPage = () => {
 
                 {/* Tombol Aksi dan Pencarian */}
                 <div className="flex justify-between items-center mb-6">
-                    <button className="flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
-                        <FiPlus className="mr-2" />
-                        Tambah Penyewa Baru
-                    </button>
-                    <div className="relative">
-                        <input
-                            type="text"
-                            placeholder="Cari penyewa..."
-                            className="bg-gray-700 text-white placeholder-gray-400 pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    </div>
-                </div>
+    <button
+        onClick={() => navigate('/penyewa/tambah')}
+        className="flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
+    >
+        <FiPlus className="mr-2" />
+        Tambah Penyewa Baru
+    </button>
+    <div className="relative">
+        <input
+            type="text"
+            placeholder="Cari penyewa..."
+            className="bg-gray-700 text-white placeholder-gray-400 pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+    </div>
+</div>
+
 
                 {/* Tabel Data */}
                 <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-x-auto">
@@ -82,7 +88,13 @@ const ManajemenPenyewaPage = () => {
                                         <td className="p-4">{item.no_telepon}</td>
                                         <td className="p-4">{formatDate(item.tanggal_pendaftaran)}</td>
                                         <td className="p-4 flex gap-2">
-                                            <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded">EDIT</button>
+                                            <button
+                                            onClick={() => navigate(`/penyewa/edit/${item.id_penyewa}`)}
+                                            className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded"
+                                            >
+                                                EDIT
+                                            </button>
+
                                             <button className="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">HAPUS</button>
                                         </td>
                                     </tr>

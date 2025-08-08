@@ -5,6 +5,8 @@ import DashboardPage from './pages/DashboardPage';
 import ManajemenPenyewaPage from './pages/ManajemenPenyewaPage';
 import ManajemenKendaraanPage from './pages/ManajemenKendaraanPage';
 import ManajemenPetugasPage from './pages/ManajemenPetugasPage';
+import TambahPenyewaPage from './pages/TambahPenyewaPage';
+import EditPenyewaPage from './pages/EditPenyewaPage';
 import './index.css';
 
 // Komponen ini berfungsi untuk melindungi sebuah halaman.
@@ -41,6 +43,23 @@ function App() {
             </PrivateRoute>
           } 
         />
+        <Route 
+          path="/penyewa/tambah" 
+          element={
+            <PrivateRoute>
+              <TambahPenyewaPage />
+           </PrivateRoute>
+          }
+        />
+        <Route
+          path="/penyewa/edit/:id"
+          element={
+            <PrivateRoute>
+              <EditPenyewaPage />
+            </PrivateRoute>
+          }
+        />
+
         <Route 
           path="/manajemen-kendaraan" 
           element={

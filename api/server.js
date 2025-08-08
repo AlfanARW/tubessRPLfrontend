@@ -113,6 +113,38 @@ app.get('/api/penyewa', async (req, res) => {
     }
 });
 
+// POST /api/penyewa
+app.post('/api/penyewa', async (req, res) => {
+    let db;
+    try {
+        db = await mysql.createConnection(dbConfig);
+
+        const {
+            nama_lengkap,
+            no_ktp,
+            no_sim,
+            alamat,
+            no_telepon,
+            email,
+            tanggal_pendaftaran
+        } = req.body;
+
+        await db.execute(`
+            INSERT INTO penyewa
+            (nama_lengkap, no_ktp, no_sim, alamat, no_telepon, email, tanggal_pendaftaran)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [nama_lengkap, no_ktp, no_sim, alamat, no_telepon, email, tanggal_pendaftaran]
+        );
+
+        res.status(201).json({ message: 'Penyewa berhasil ditambahkan.' });
+    } catch (error) {
+        console.error('Error saat menambahkan penyewa:', error);
+        res.status(500).json({ message: 'Gagal menambahkan penyewa.' });
+    } finally {
+        if (db) await db.end();
+    }
+});
+
 // GET /api/kendaraan
 app.get('/api/kendaraan', async (req, res) => {
     let db;
@@ -138,6 +170,37 @@ app.get('/api/petugas', async (req, res) => {
     } catch (error) {
         console.error("Petugas error:", error);
         res.status(500).json({ message: 'Gagal mengambil data petugas' });
+    } finally {
+        if (db) await db.end();
+    }
+});
+
+app.get('/api/penyewa/:id', async (req, res) => {
+    let db;
+    try {
+        db = await mysql.createConnection(dbConfig);
+        const [rows] = await db.execute('SELECT * FROM penyewa WHERE id_penyewa = ?', [req.params.id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Penyewa tidak ditemukan.' });
+        res.status(200).json(rows[0]);
+    } catch (error) {
+        res.status(500).json({ message: 'Gagal mengambil data penyewa.' });
+    } finally {
+        if (db) await db.end();
+    }
+});
+
+app.put('/api/penyewa/:id', async (req, res) => {
+    let db;
+    try {
+        db = await mysql.createConnection(dbConfig);
+        const { no_sim, alamat, no_telepon, email } = req.body;
+        await db.execute(
+            `UPDATE penyewa SET no_sim = ?, alamat = ?, no_telepon = ?, email = ? WHERE id_penyewa = ?`,
+            [no_sim, alamat, no_telepon, email, req.params.id]
+        );
+        res.status(200).json({ message: 'Data penyewa diperbarui.' });
+    } catch (error) {
+        res.status(500).json({ message: 'Gagal mengupdate data penyewa.' });
     } finally {
         if (db) await db.end();
     }
